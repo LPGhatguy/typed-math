@@ -33,12 +33,18 @@ ${a[8]}, ${a[9]}, ${a[10]}, ${a[11]},
 ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 	}
 
+	/**
+	 * Copies this matrix to another one.
+	 */
 	copy(other: Matrix4x4 = new Matrix4x4()) {
 		other.array.set(this.array);
 
 		return other;
 	}
 
+	/**
+	 * Sets values for the matrix.
+	 */
 	set(
 		a = 1, b = 0, c = 0, d = 0,
 		e = 0, f = 1, g = 0, h = 0,
@@ -165,6 +171,9 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 		return instance;
 	}
 
+	/**
+	 * Sets the matrix to be a look-at view transform.
+	 */
 	setLookAt(eye: Vector3, center: Vector3, up: Vector3) {
 		let f = center.subtractVector(eye).normalize();
 		let s = f.crossVector(up).normalize();
@@ -180,6 +189,9 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 		return this;
 	}
 
+	/**
+	 * Creates a new look-at view transform.
+	 */
 	static newLookAt(eye: Vector3, center: Vector3, up: Vector3) {
 		let instance = new Matrix4x4();
 
@@ -256,6 +268,9 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 			- a14*a21*a32*a43 - a14*a22*a33*a41 - a14*a23*a31*a42;
 	}
 
+	/**
+	 * Resets the matrix to be a translation.
+	 */
 	setTranslation(x, y, z) {
 		this.set(
 			1, 0, 0, 0,
@@ -284,6 +299,36 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 	}
 
 	/**
+	 * Resets the matrix to be a scale.
+	 */
+	setScale(x, y, z) {
+		this.set(
+			x, 0, 0, 0,
+			0, y, 0, 0,
+			0, 0, z, 0,
+			0, 0, 0, 1
+		);
+
+		return this;
+	}
+
+	/**
+	 * Scales the matrix.
+	 * @param out The Matrix to output to. Default to self.
+	 */
+	scale(x, y, z, out: Matrix4x4 = this) {
+		this.multiply(
+			x, 0, 0, 0,
+			0, y, 0, 0,
+			0, 0, z, 0,
+			0, 0, 0, 1,
+			out
+		);
+
+		return this;
+	}
+
+	/**
 	 * Rotates the matrix with Euler angles.
 	 * @param out The Matrix to output to. Defaults to self.
 	 */
@@ -295,6 +340,10 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 		return out;
 	}
 
+	/**
+	 * Rotates the matrix around the X axis.
+	 * @param out The Matrix to output to. Defaults to self.
+	 */
 	rotateX(t, out: Matrix4x4 = this) {
 		this.multiply(
 			1, 0, 0, 0,
@@ -307,6 +356,10 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 		return out;
 	}
 
+	/**
+	 * Rotates the matrix around the X axis.
+	 * @param out The Matrix to output to. Defaults to self.
+	 */
 	rotateY(t, out: Matrix4x4 = this) {
 		this.multiply(
 			Math.cos(t), 0, Math.sin(t), 0,
@@ -319,6 +372,10 @@ ${a[12]}, ${a[13]}, ${a[14]}, ${a[15]}`.slice(1);
 		return out;
 	}
 
+	/**
+	 * Rotates the matrix around the X axis.
+	 * @param out The Matrix to output to. Defaults to self.
+	 */
 	rotateZ(t, out: Matrix4x4 = this) {
 		this.multiply(
 			Math.cos(t), -Math.sin(t), 0, 0,
